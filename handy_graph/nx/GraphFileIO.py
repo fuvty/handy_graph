@@ -6,7 +6,7 @@ Created on Tue Apr 14 15:03:58 2020
 @author: futianyu
 """
 
-from typing import Tuple, List, Set
+from typing import Any, Tuple, List, Set, Union
 from networkx.classes.function import selfloop_edges
 from networkx.generators import directed
 from scipy.io import mmread
@@ -73,9 +73,10 @@ def ReadEdgeFile(file:str, Edge_list: list, nodes:set):
     print('GraphFileIO: edge_num of the whole graph is',len(Edge_list))
     print('GraphFileIO: node_num of the graph is',len(nodes))
 
-def WriteEdgeList(filename: str, Edge_list: list):
+def WriteEdgeList(filename: Union[str, Any], Edge_list: List[Union[List, Tuple]], first_line: str = None) -> None:
     '''
     write list of edges to file. e.g.
+    (optional) first_line
     0 1
     0 2
     1 2
@@ -83,7 +84,11 @@ def WriteEdgeList(filename: str, Edge_list: list):
     num_E = len(Edge_list)
     print('GraphFileIO: write edge of the whole graph is',num_E)
 
-    with open(filename, 'x') as f:
+    with open(filename, 'w') as f:
+        if first_line:
+            f.write(first_line)
+            if first_line[-1] != '\n':
+                f.write('\n')
         for edge in Edge_list:
             f.write( str(edge[0])+" "+str(edge[1])+"\n" )
     f.close()
