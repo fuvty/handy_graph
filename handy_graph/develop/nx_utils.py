@@ -19,7 +19,15 @@ def draw_nxgraphs(graphs: List[nx.Graph], outpath= "tmp.jpg", nrows= 2):
     plt.suptitle(str(datetime.now().strftime("%D - %H:%M:%S")))
     plt.savefig(outpath)
 
-def draw_adjmatrix(graphs: List[nx.Graph], outpath= "tmp.jpg", nrows= 2):
+def draw_adjmatrix(graph: nx.Graph, outpath= 'tmp.jpg', figsize= (20,20)):
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=figsize)
+    edges = np.array(graph.edges)
+    ax.scatter(edges[:,0], edges[:,1])
+    ax.title.set_text(outpath.split('.')[0:-2])
+    plt.savefig(outpath)
+
+
+def draw_adjmatricies(graphs: List[nx.Graph], outpath= "tmp.jpg", nrows= 2):
     ncols = int(ceil(len(graphs)/nrows))
     fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(25,10))
     ax = axes.flatten()
@@ -30,7 +38,7 @@ def draw_adjmatrix(graphs: List[nx.Graph], outpath= "tmp.jpg", nrows= 2):
     plt.suptitle(str(datetime.now().strftime("%D - %H:%M:%S")))
     plt.savefig(outpath)
 
-def draw_adjmatrix_edge(edge_lists: List[nx.Graph], outpath= "tmp.jpg", nrows= 2):
+def draw_adjmatrix_edge(edge_lists: List[List], outpath= "tmp.jpg", nrows= 2):
     ncols = int(ceil(len(edge_lists)/nrows))
     fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(25,10))
     ax = axes.flatten()
