@@ -52,12 +52,18 @@ def nx2el(graph: nx.Graph, sort = True):
         edge_list = [(e[0],e[1]) for e in graph.edges]
     return edge_list
 
-def el2nx(edge_list: list, directed= False):
+def el2nx(edge_list: list, directed= False) -> nx.Graph:
+    '''
+    convert edge_list to networkx graphs
+    '''
     graph = nx.Graph(directed= directed)
     graph.add_edges_from(edge_list)
     return graph
 
-def file2nx(filename: str):
+def file2nx(filename: str) -> nx.Graph:
+    '''
+    read edge_list file and convert to networkx graphs
+    '''
     edge_list = list()
 
     with open(filename, 'r') as f:

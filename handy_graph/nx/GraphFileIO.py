@@ -6,7 +6,7 @@ Created on Tue Apr 14 15:03:58 2020
 @author: futianyu
 """
 
-from typing import Any, Tuple, List, Set, Union
+from typing import Any, Optional, Tuple, List, Set, Union
 from networkx.classes.function import selfloop_edges
 from networkx.generators import directed
 from scipy.io import mmread
@@ -37,13 +37,25 @@ def ReadMtxFile(file: str) -> Tuple[List, Set]:
 
 
 # read edge list and sort in ascending order
-def ReadEdgeFile(file:str, Edge_list: list, nodes:set):
+def ReadEdgeFile(file: str, edge_list: List = None, node_set: Set = None) -> Optional[Tuple[List, Set]]:
     '''
-    read edge list and sort in ascending order
+    Read edge list and sort in ascending order.
+    If edge_list and node_set is given, increamental add is used with inplace replacement.
+    If not, return new edge_list and node_set
     '''
     with open(file, 'r') as f:
         rawlines = f.readlines()
     f.close()  
+
+    if (edge_list == None) and (node_set == None):
+        incremental = False
+        edge_list = list()
+        node_set = set()
+    elif (edge_list != None) and (node_set != None):
+        incremental = True
+    else:
+        print("GraphFileIO: Either both edge_list and node_set are not given or both are given")
+        raise NotImplementedError
 
     for line in rawlines:
         if not line.startswith("#"):
@@ -52,26 +64,28 @@ def ReadEdgeFile(file:str, Edge_list: list, nodes:set):
             from_node = int(splitted[0])
             to_node   = int(splitted[1])
             
-            nodes.add(from_node)
-            nodes.add(to_node)
+            node_set.add(from_node)
+            node_set.add(to_node)
 
-            Edge_list.append([from_node, to_node])
+            edge_list.append([from_node, to_node])
 
-    num_E = len(Edge_list)
+    num_E = len(edge_list)
     
     # to make the first node smaller than the second in every edge
-    for j in range(num_E): 
-        if Edge_list[j][0]>Edge_list[j][1]:
-            t = Edge_list[j][0]
-            Edge_list[j][0] = Edge_list[j][1]
-            Edge_list[j][1] = t
+    # for j in range(num_E): 
+    #     if edge_list[j][0]>edge_list[j][1]:
+    #         t = edge_list[j][0]
+    #         edge_list[j][0] = edge_list[j][1]
+    #         edge_list[j][1] = t
     
-
     # sort the edges
-    Edge_list = sorted(Edge_list,key=lambda x:(x[0],x[1])) 
+    edge_list = sorted(edge_list,key=lambda x:(x[0],x[1])) 
     
-    print('GraphFileIO: edge_num of the whole graph is',len(Edge_list))
-    print('GraphFileIO: node_num of the graph is',len(nodes))
+    print('GraphFileIO: edge_num of the whole graph is',len(edge_list))
+    print('GraphFileIO: node_num of the graph is',len(node_set))
+
+    if not incremental:
+        return (edge_list, node_set)
 
 def WriteEdgeList(filename: Union[str, Any], Edge_list: List[Union[List, Tuple]], first_line: str = None) -> None:
     '''
