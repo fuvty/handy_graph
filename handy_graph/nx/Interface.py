@@ -71,11 +71,10 @@ def file2nx(filename: str) -> nx.Graph:
     f.close()  
 
     for line in rawlines:
-        splitted = line.strip('\n').split()
-
-        from_node = int(splitted[0])
-        to_node   = int(splitted[1])
-
-        edge_list.append((from_node, to_node))
+        if not line.startswith("#"):
+            splitted = line.strip('\n').split()
+            from_node = int(splitted[0])
+            to_node   = int(splitted[1])
+            edge_list.append((from_node, to_node))
     
     return el2nx(edge_list)

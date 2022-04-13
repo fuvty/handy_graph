@@ -24,6 +24,7 @@ def draw_adjmatrix(graph: nx.Graph, outpath= 'tmp.jpg', figsize= (20,20)):
     edges = np.array(graph.edges)
     ax.scatter(edges[:,0], edges[:,1])
     ax.title.set_text(outpath.split('.')[0:-2])
+    plt.gca().invert_yaxis()
     plt.savefig(outpath)
 
 
