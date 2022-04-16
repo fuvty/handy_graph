@@ -1,10 +1,15 @@
 from typing import List
+from matplotlib import animation
+from matplotlib.axis import Axis
+from matplotlib.figure import Figure
 import networkx as nx
 import matplotlib.pyplot as plt
 from datetime import datetime
 from numpy import ceil
 import csv
 import numpy as np
+import sys
+from typing import Union
 
 def draw_nxgraphs(graphs: List[nx.Graph], outpath= "tmp.jpg", nrows= 2):
     ncols = int(ceil(len(graphs)/nrows))
@@ -76,3 +81,30 @@ def get_degree_distribution(graphs: List[nx.Graph], draw= False, to_csv= False) 
             writer = csv.writer(f)
             writer.writerows(degrees)
     return degrees
+
+class DynamicAdjMatrix:
+    def __init__(self, ax, size) -> None:
+        self.ax = ax
+        self.edge_lists = []
+        self.size = size
+        plt.xlim(0, self.size)
+        plt.ylim(0, self.size)
+
+    def __call__(self, i):
+        self.scat.set_offsets(self.edge_lists[i])
+        self.ax.set_title(str(i))
+        return self.scat,
+
+    def __len__(self):
+        return len(self.edge_lists)
+
+    def init_graph(self):
+        # self.ax.invert_yaxis()
+        self.scat = self.ax.scatter([], [], s=1)
+        return self.scat,
+
+    def add_graph(self, graph: Union[nx.Graph, nx.DiGraph]):
+        if not graph.is_directed():
+            graph = graph.to_directed()
+        edges = np.array(graph.edges).reshape(-1, 2)
+        self.edge_lists.append(edges)
