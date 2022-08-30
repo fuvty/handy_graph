@@ -107,6 +107,31 @@ def WriteEdgeList(filename: Union[str, Any], Edge_list: List[Union[List, Tuple]]
             f.write( str(edge[0])+" "+str(edge[1])+"\n" )
     f.close()
 
+def WriteLabeledGraph(filename: Union[str, Any], graph: nx.Graph, node_label_key: str = None) -> None:
+    '''
+    write labeled graphs to file. the format is defined by https://github.com/RapidsAtHKUST/SubgraphMatching; e.g.
+    t N M
+    v VertexID LabelId Degree
+    ...
+    e VertexId VertexId
+    ...
+    '''
+    num_N = len(graph.nodes)
+    num_E = len(graph.edges)
+    print('GraphFileIO: write node of the whole graph is',num_N)
+    print('GraphFileIO: write edge of the whole graph is',num_E)
+
+    with open(filename, 'w') as f:
+        f.write('t '+str(num_N)+' '+str(num_E)+'\n')
+        for node in sorted(graph.nodes):
+            if node_label_key:
+                f.write('v '+str(node)+' '+str(int(graph.nodes[node][node_label_key]))+' '+str(int(graph.degree(node)))+'\n')
+            else:
+                f.write('v '+str(node)+' '+str(0)+' '+str(graph.degree(node))+'\n')
+        for edge in sorted(graph.edges):
+            f.write('e '+str(edge[0])+' '+str(edge[1])+'\n')
+    f.close()
+
 def WriteAdjList(filename: str, adj_dict: dict):
     '''
     write adj list to file. Note that the key of dict myst be continues. Each line is the adj_list of a node. e.g
@@ -126,7 +151,3 @@ def WriteAdjList(filename: str, adj_dict: dict):
             f.write('\n')
     f.close()
 
-
-if __name__=='__main__':
-    edge_list, node_set = ReadMtxFile("/home/futy18/data/graph_data/mtx_list/econ-beaflw.mtx")
-    WriteEdgeList("/home/futy18/data/graph_data/edge_list/econ-beaflw.txt", edge_list)
