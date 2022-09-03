@@ -107,7 +107,7 @@ def WriteEdgeList(filename: Union[str, Any], Edge_list: List[Union[List, Tuple]]
             f.write( str(edge[0])+" "+str(edge[1])+"\n" )
     f.close()
 
-def WriteLabeledGraph(filename: Union[str, Any], graph: nx.Graph, node_label_key: str = None) -> None:
+def WriteLabeledGraph(filename: Union[str, Any], graph: nx.Graph, node_label_key: str = None, edge_label_key: str = None, header: str = None, add_node_degree: bool = False, add_edge_feature: bool = False) -> None:
     '''
     write labeled graphs to file. the format is defined by https://github.com/RapidsAtHKUST/SubgraphMatching; e.g.
     t N M
@@ -115,6 +115,7 @@ def WriteLabeledGraph(filename: Union[str, Any], graph: nx.Graph, node_label_key
     ...
     e VertexId VertexId
     ...
+    use header to replace the default header
     '''
     num_N = len(graph.nodes)
     num_E = len(graph.edges)
@@ -122,14 +123,29 @@ def WriteLabeledGraph(filename: Union[str, Any], graph: nx.Graph, node_label_key
     print('GraphFileIO: write edge of the whole graph is',num_E)
 
     with open(filename, 'w') as f:
-        f.write('t '+str(num_N)+' '+str(num_E)+'\n')
+        if header is None:
+            f.write('t '+str(num_N)+' '+str(num_E)+'\n')
+        else:
+            f.write(header)
+            if header[-1] != '\n':
+                f.write('\n')
         for node in sorted(graph.nodes):
-            if node_label_key:
-                f.write('v '+str(node)+' '+str(int(graph.nodes[node][node_label_key]))+' '+str(int(graph.degree(node)))+'\n')
+            if add_node_degree:
+                degree_str = ' '+str(int(graph.degree(node)))
             else:
-                f.write('v '+str(node)+' '+str(0)+' '+str(graph.degree(node))+'\n')
+                degree_str = ''
+            if node_label_key:
+                f.write(' '.join(('v',str(node),str(int(graph.nodes[node][node_label_key]))))+degree_str+'\n')
+            else:
+                f.write(' '.join(('v',str(node),str(0)))+degree_str+'\n')
         for edge in sorted(graph.edges):
-            f.write('e '+str(edge[0])+' '+str(edge[1])+'\n')
+            if add_edge_feature:
+                if edge_label_key:
+                    f.write(' '.join(('e',str(edge[0]),str(edge[1]),str(int(graph.edges[edge][edge_label_key]))))+'\n')
+                else:
+                    f.write(' '.join(('e',str(edge[0]),str(edge[1]),str(1)))+'\n')
+            else:
+                f.write(' '.join(('e',str(edge[0]),str(edge[1])))+'\n')
     f.close()
 
 def WriteAdjList(filename: str, adj_dict: dict):
