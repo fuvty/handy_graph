@@ -13,3 +13,8 @@ repos:
     rev: 22.10.0
     hooks:
     -   id: black
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v1.2.3
+    hooks:
+      - id: flake8
+        # args: [--max-line-length=5 --extend-ignore=E203,E501,W503]
