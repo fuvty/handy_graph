@@ -5,6 +5,7 @@ from handy_graph.nx.Relabel import RelabelEdgeList
 
 # convert graphtool, node set edge_list and networkx
 
+
 def nx2dict(graph: Union[nx.Graph, nx.DiGraph]):
     adj_dict = dict()
     for node in graph.nodes():
@@ -14,10 +15,11 @@ def nx2dict(graph: Union[nx.Graph, nx.DiGraph]):
         adj_dict[node] = neighbor
     return adj_dict
 
+
 def nx2csr(graph: nx.Graph):
-    '''
+    """
     convert nx to csr
-    '''
+    """
     adj_dict = nx2dict(graph)
     max_node = max(adj_dict.keys())
 
@@ -33,48 +35,50 @@ def nx2csr(graph: nx.Graph):
     neigh_list = []
 
     iter = 0
-    for node,neighs in adj_tuple:
+    for node, neighs in adj_tuple:
         assert node == iter
         row_list.append(len(neigh_list))
         for neigh in neighs:
             neigh_list.append(neigh)
-        iter+=1
+        iter += 1
     row_list.append(len(neigh_list))
 
     return row_list, neigh_list
 
 
-def nx2el(graph: nx.Graph, sort = True):
+def nx2el(graph: nx.Graph, sort=True):
     if sort:
-        edge_list = [(min(e),max(e)) for e in graph.edges]
+        edge_list = [(min(e), max(e)) for e in graph.edges]
         edge_list.sort()
     else:
-        edge_list = [(e[0],e[1]) for e in graph.edges]
+        edge_list = [(e[0], e[1]) for e in graph.edges]
     return edge_list
 
-def el2nx(edge_list: list, directed= False) -> nx.Graph:
-    '''
+
+def el2nx(edge_list: list, directed=False) -> nx.Graph:
+    """
     convert edge_list to networkx graphs
-    '''
-    graph = nx.Graph(directed= directed)
+    """
+    graph = nx.Graph(directed=directed)
     graph.add_edges_from(edge_list)
     return graph
 
+
 def file2nx(filename: str) -> nx.Graph:
-    '''
+    """
     read edge_list file and convert to networkx graphs
-    '''
+    """
     edge_list = list()
 
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         rawlines = f.readlines()
-    f.close()  
+    f.close()
 
     for line in rawlines:
         if not line.startswith("#"):
-            splitted = line.strip('\n').split()
+            splitted = line.strip("\n").split()
             from_node = int(splitted[0])
-            to_node   = int(splitted[1])
+            to_node = int(splitted[1])
             edge_list.append((from_node, to_node))
-    
+
     return el2nx(edge_list)
