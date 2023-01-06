@@ -1,7 +1,5 @@
 import networkx as nx
-
 from typing import Union
-from handy_graph.nx.Relabel import RelabelEdgeList
 
 # convert graphtool, node set edge_list and networkx
 

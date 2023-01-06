@@ -2,6 +2,7 @@ import graph_tool.all as gt
 import networkx as nx
 import numpy as np
 from tqdm import tqdm
+import pickle
 
 from Interface import nx2gt
 from Relabel import RelabelNX

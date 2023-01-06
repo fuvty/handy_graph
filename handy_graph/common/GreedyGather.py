@@ -15,7 +15,6 @@ def GreedyGather(Node_set: set, Edge_list: list, offset=0) -> Tuple[List[List], 
     inputs: node set; edge list; offset: the number of the first output node label
     outputs: gathered edge list; the node mapping dictionary
     """
-    num_N = len(Node_set)
     accPoint = offset
     index = {key: -1 for key in Node_set}
     for edge in Edge_list:
@@ -41,17 +40,3 @@ def GreedyGather(Node_set: set, Edge_list: list, offset=0) -> Tuple[List[List], 
         Edge_list_new.append([i0, i1])
 
     return Edge_list_new, node_map
-
-
-if __name__ == "__main__":
-    from GraphFileIO import ReadEdgeFile, WriteEdgeList
-
-    Node_set = set()
-    Edge_list = list()
-    ReadEdgeFile(
-        "/home/futy18/data/graph_data/edge_list/citeseer.txt", Edge_list, Node_set
-    )
-    Edge_list_new, node_map = GreedyGather(Node_set, Edge_list)
-
-    # WriteEdgeList("/home/futy18/data/graph_data/greedyGather_edge_list/citeseer.txt", Edge_list_new)
-    print("done")

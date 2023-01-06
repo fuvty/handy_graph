@@ -1,8 +1,6 @@
 # Relabel nodes to start from 0
-
 import graph_tool.all as gt
 import networkx as nx
-from networkx.generators import directed
 
 
 def RelabelEdgeListMap(node_set: set, edge_list: list):
@@ -30,7 +28,7 @@ def RelabelGT(graph: gt.Graph) -> gt.Graph:
     return the reordered graph gt
     """
     edge_list = graph.get_edges().tolist()
-    node_set = set(graph.get_vertices())
+    node_set = set(graph.get_vertices())  # noqa
     edge_list = RelabelEdgeList(edge_list)
     graph_gt = gt.Graph(graph.is_directed())
     graph_gt.add_edge_list(edge_list)

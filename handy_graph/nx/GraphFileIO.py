@@ -7,8 +7,6 @@ Created on Tue Apr 14 15:03:58 2020
 """
 
 from typing import Any, Optional, Tuple, List, Set, Union
-from networkx.classes.function import selfloop_edges
-from networkx.generators import directed
 from scipy.io import mmread
 from scipy.sparse.coo import coo_matrix
 import scipy.sparse as sparse
@@ -48,11 +46,11 @@ def ReadEdgeFile(
         rawlines = f.readlines()
     f.close()
 
-    if (edge_list == None) and (node_set == None):
+    if (edge_list is None) and (node_set is None):
         incremental = False
         edge_list = list()
         node_set = set()
-    elif (edge_list != None) and (node_set != None):
+    elif (edge_list is not None) and (node_set is not None):
         incremental = True
     else:
         print(
@@ -72,7 +70,7 @@ def ReadEdgeFile(
 
             edge_list.append([from_node, to_node])
 
-    num_E = len(edge_list)
+    num_E = len(edge_list)  # noqa
 
     # to make the first node smaller than the second in every edge
     # for j in range(num_E):

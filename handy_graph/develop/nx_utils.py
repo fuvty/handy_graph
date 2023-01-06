@@ -1,14 +1,10 @@
 from typing import List
-from matplotlib import animation
-from matplotlib.axis import Axis
-from matplotlib.figure import Figure
 import networkx as nx
 import matplotlib.pyplot as plt
 from datetime import datetime
 from numpy import ceil
 import csv
 import numpy as np
-import sys
 from typing import Union
 
 
@@ -74,8 +70,8 @@ def get_degree_distribution(
         outname = "tmp"
         nrows = 1
         ncols = int(ceil(len(graphs) / nrows))
-        fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(25, 10))
-        ax = axes.flatten()
+        _, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(25, 10))
+        _ = axes.flatten()
         for i in range(len(graphs)):
             degree = degrees[i]
             x = [i for i in range(len(degree))]
