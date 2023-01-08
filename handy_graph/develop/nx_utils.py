@@ -90,7 +90,9 @@ class DynamicAdjMatrix:
     def __init__(self, fig_size_x, fig_size_y, size) -> None:
         self.fig_size_x = fig_size_x
         self.fig_size_y = fig_size_y
-        self.fig, self.ax = plt.subplots(nrows=1, ncols=1, figsize=(self.fig_size_x,self.fig_size_y))
+        self.fig, self.ax = plt.subplots(
+            nrows=1, ncols=1, figsize=(self.fig_size_x, self.fig_size_y)
+        )
         self.edge_lists = []
         self.size = size
         plt.xlim(0, self.size)
@@ -116,6 +118,13 @@ class DynamicAdjMatrix:
         edges = np.array(graph.edges).reshape(-1, 2)
         self.edge_lists.append(edges)
 
-    def save_animation(self, fps:int, path, name):
-        anim = animation.FuncAnimation(self.fig, self.__call__, frames=len(self.edge_lists), blit=True, repeat_delay=1000, init_func=self.init_graph)
-        anim.save(path+'/'+name+'.gif', animation.FFMpegWriter(fps=fps))
+    def save_animation(self, fps: int, path, name):
+        anim = animation.FuncAnimation(
+            self.fig,
+            self.__call__,
+            frames=len(self.edge_lists),
+            blit=True,
+            repeat_delay=1000,
+            init_func=self.init_graph,
+        )
+        anim.save(path + "/" + name + ".gif", animation.FFMpegWriter(fps=fps))
