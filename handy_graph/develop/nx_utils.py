@@ -1,6 +1,7 @@
 from typing import List
 import networkx as nx
 import matplotlib.pyplot as plt
+from matplotlib import animation
 from datetime import datetime
 from numpy import ceil
 import csv
@@ -86,12 +87,18 @@ def get_degree_distribution(
 
 
 class DynamicAdjMatrix:
-    def __init__(self, ax, size) -> None:
-        self.ax = ax
+    def __init__(self, fig_size_x, fig_size_y, graph_size, marker_size) -> None:
+        self.fig_size_x = fig_size_x
+        self.fig_size_y = fig_size_y
+        self.fig, self.ax = plt.subplots(
+            nrows=1, ncols=1, figsize=(self.fig_size_x, self.fig_size_y)
+        )
         self.edge_lists = []
-        self.size = size
-        plt.xlim(0, self.size)
-        plt.ylim(0, self.size)
+        self.graph_size = graph_size
+        self.marker_size = marker_size
+        plt.xlim(0, self.graph_size)
+        plt.ylim(0, self.graph_size)
+        plt.gca().invert_yaxis()
 
     def __call__(self, i):
         self.scat.set_offsets(self.edge_lists[i])
@@ -103,7 +110,7 @@ class DynamicAdjMatrix:
 
     def init_graph(self):
         # self.ax.invert_yaxis()
-        self.scat = self.ax.scatter([], [], s=1)
+        self.scat = self.ax.scatter([], [], s=self.marker_size)
         return (self.scat,)
 
     def add_graph(self, graph: Union[nx.Graph, nx.DiGraph]):
@@ -111,3 +118,14 @@ class DynamicAdjMatrix:
             graph = graph.to_directed()
         edges = np.array(graph.edges).reshape(-1, 2)
         self.edge_lists.append(edges)
+
+    def save_animation(self, fps: int, path, name):
+        anim = animation.FuncAnimation(
+            self.fig,
+            self.__call__,
+            frames=len(self.edge_lists),
+            blit=True,
+            repeat_delay=1000,
+            init_func=self.init_graph,
+        )
+        anim.save(path + "/" + name + ".gif", animation.FFMpegWriter(fps=fps))
