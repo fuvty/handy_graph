@@ -12,6 +12,10 @@ This repo provides some commonly used user-defined graph processing tools. It pr
 
 - Easy graph visualization, for example, adjacent matrix
 
+## CI/CD
+
+This repo uses pre-commit, circleci and codecov to ensure code quality.
+
 ## Additional Details
 
 For usage and further discussion, please contact [Tianyu Fu](http://nicsefc.ee.tsinghua.edu.cn/people/TianyuFu).
