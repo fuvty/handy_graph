@@ -4,16 +4,6 @@
 @coauthor: WanZiqian
 """
 import copy
-from typing import Union
-import networkx as nx
-
-
-def nx2dict(graph: Union[nx.Graph, nx.DiGraph]):
-    adj_dict = dict()
-    for node in graph.nodes():
-        neighbor = [n for n in graph.neighbors(node)]
-        adj_dict[node] = neighbor
-    return adj_dict
 
 
 def MakeDictionary(edge_list: list):

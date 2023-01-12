@@ -8,7 +8,7 @@ Created on Tue Apr 14 15:03:58 2020
 
 from typing import Any, Optional, Tuple, List, Set, Union
 from scipy.io import mmread
-from scipy.sparse.coo import coo_matrix
+from scipy.sparse import coo_matrix
 import scipy.sparse as sparse
 import networkx as nx
 
