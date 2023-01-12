@@ -1,7 +1,7 @@
 import networkx as nx
 from typing import Union
 
-from handy_graph.nx import nx2dict
+from handy_graph import nx2dict
 
 
 def gen_graphs():
