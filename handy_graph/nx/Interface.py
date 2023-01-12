@@ -44,7 +44,13 @@ def nx2csr(graph: nx.Graph):
     return row_list, neigh_list
 
 
-def nx2el(graph: nx.Graph, sort=True):
+def nx2el(graph: Union[nx.Graph, nx.DiGraph], sort: bool = None) -> list:
+    """
+    convert networkx graph to edge list
+    if sort is None, sort if graph is undirected, not sort if graph is directed
+    """
+    if sort is None:
+        sort = not graph.is_directed()
     if sort:
         edge_list = [(min(e), max(e)) for e in graph.edges]
         edge_list.sort()
