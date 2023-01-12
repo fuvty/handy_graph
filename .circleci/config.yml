@@ -37,7 +37,7 @@ jobs:
           name: Install the package
           command: pip install .
       - run:
-          name: Run the ests
+          name: Run the tests
           # This assumes pytest is installed via the install-package step above
           command: pytest
 
