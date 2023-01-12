@@ -43,7 +43,7 @@ jobs:
           command: pytest
       - run:
           name: Run with pytest cov
-          command: pytest --cov
+          command: pytest --cov handy_graph/
       - codecov/upload
 
 # Invoke jobs via workflows
